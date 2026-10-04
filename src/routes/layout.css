@@ -1,0 +1,479 @@
+@import '@nahu/admin-kit/styles/theme.css';
+
+/*
+ * ─── The public site ──────────────────────────────────────────────────────────────────────────
+ * The kit's theme (blue, Inter) stays the dashboard's. Everything under `.site` gets the site's
+ * icy-blue theme instead, by redefining the same tokens on the wrapper, so `bg-primary`,
+ * `text-accent` and `border-border` resolve to the site's colours there only.
+ *
+ * Two of them: light, and the original dark under `.dark` (set on <html> by mode-watcher before
+ * the first paint, from the visitor's choice or their system's). Components draw with tokens and
+ * `foreground/…` tints rather than `white/…`, so one set of classes works in both.
+ */
+.site {
+	--background: oklch(0.985 0.006 230);
+	--foreground: oklch(0.22 0.035 245);
+	--card: rgba(255, 255, 255, 0.7);
+	--card-foreground: oklch(0.22 0.035 245);
+	--popover: #ffffff;
+	--popover-foreground: oklch(0.22 0.035 245);
+	/* A shade deeper than the dark theme's, so small blue text keeps its contrast on white. */
+	--primary: oklch(0.52 0.16 245);
+	--primary-foreground: #ffffff;
+	--secondary: oklch(0.55 0.12 195);
+	--secondary-foreground: #ffffff;
+	--muted: oklch(0.95 0.012 230);
+	--muted-foreground: oklch(0.45 0.035 240);
+	--accent: oklch(0.58 0.13 215);
+	--accent-foreground: #ffffff;
+	--border: rgba(12, 40, 80, 0.1);
+	--input: rgba(12, 40, 80, 0.14);
+	--ring: oklch(0.52 0.16 245);
+	--radius: 1rem;
+
+	--site-bg: #f6fafd;
+	--site-deep: #e8f1f8;
+	--glass-bg: rgba(255, 255, 255, 0.6);
+	--glass-card-bg: rgba(255, 255, 255, 0.75);
+	--glass-border: rgba(12, 40, 80, 0.09);
+	--glass-shadow: 0 8px 32px rgba(20, 70, 140, 0.08);
+	--gradient-from: #1d6fe0;
+	--gradient-to: #0aa5c9;
+
+	/* The original loads no webfont: it is drawn in the platform's own UI face. */
+	font-family:
+		ui-sans-serif,
+		system-ui,
+		-apple-system,
+		BlinkMacSystemFont,
+		'Segoe UI',
+		Roboto,
+		'Helvetica Neue',
+		Arial,
+		'Noto Sans',
+		sans-serif,
+		'Apple Color Emoji',
+		'Segoe UI Emoji',
+		'Segoe UI Symbol',
+		'Noto Color Emoji',
+		'Noto Sans Ethiopic';
+	color: var(--foreground);
+	-webkit-font-smoothing: auto;
+	-moz-osx-font-smoothing: auto;
+}
+
+.dark .site {
+	--background: oklch(0.05 0.02 245);
+	--foreground: oklch(0.98 0.01 230);
+	--card: rgba(255, 255, 255, 0.05);
+	--card-foreground: oklch(0.98 0.01 230);
+	--popover: oklch(0.08 0.03 245);
+	--popover-foreground: oklch(0.98 0.01 230);
+	--primary: oklch(0.66 0.15 240);
+	--primary-foreground: oklch(0.98 0.01 230);
+	--secondary: oklch(0.66 0.12 190);
+	--secondary-foreground: oklch(0.98 0.01 230);
+	--muted: oklch(0.15 0.03 245);
+	--muted-foreground: oklch(0.72 0.04 235);
+	--accent: oklch(0.72 0.13 210);
+	--accent-foreground: oklch(0.98 0.01 230);
+	--border: rgba(255, 255, 255, 0.1);
+	--input: rgba(255, 255, 255, 0.1);
+	--ring: oklch(0.66 0.15 240);
+
+	--site-bg: #01050d;
+	--site-deep: #030b18;
+	--glass-bg: #ffffff08;
+	--glass-card-bg: #ffffff0d;
+	--glass-border: rgba(255, 255, 255, 0.1);
+	--glass-shadow: 0 8px 32px #0000005e;
+	--gradient-from: #7cc4ff;
+	--gradient-to: #c4f1ff;
+}
+
+/*
+ * The kit sets h1–h4 and p outside any layer (sizes for an admin screen), and unlayered rules beat
+ * Tailwind's utilities whatever their specificity. `revert-layer` hands those properties back to
+ * the layers, so on the public page a heading's `text-7xl` means 72px again.
+ */
+.site :where(h1, h2, h3, h4, p) {
+	font-family: revert-layer;
+	font-weight: revert-layer;
+	font-size: revert-layer;
+	line-height: revert-layer;
+	letter-spacing: revert-layer;
+}
+
+/* Overscroll past the page shows the page's colour, not the kit's light grey. */
+html:has(.site),
+body:has(.site) {
+	background-color: #f6fafd;
+}
+html.dark:has(.site),
+html.dark:has(.site) body {
+	background-color: #01050d;
+}
+
+/* The header is fixed: a `#packages` link stops below it instead of under it. */
+html:has(.site) {
+	scroll-padding-top: 6rem;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	html:has(.site) {
+		scroll-behavior: smooth;
+	}
+}
+
+/*
+ * Unlayered on purpose, as on the original: they outrank Tailwind's utilities, so a `border-*`,
+ * `bg-*` or `shadow-*` class next to `glass`/`glass-card` has no effect. Change the rule here
+ * rather than adding utilities to a glass element.
+ */
+.glass {
+	background: var(--glass-bg);
+	backdrop-filter: blur(16px);
+	-webkit-backdrop-filter: blur(16px);
+	border: 1px solid var(--glass-border);
+}
+
+.glass-card {
+	background: var(--glass-card-bg);
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+	border: 1px solid var(--glass-border);
+	box-shadow: var(--glass-shadow);
+}
+
+.text-gradient {
+	background: linear-gradient(to right, var(--gradient-from), var(--gradient-to));
+	-webkit-background-clip: text;
+	background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+/*
+ * The original's shadcn theme redefined the shadow scale to much softer values than Tailwind's
+ * defaults. The kit keeps Tailwind's, so the site uses these two by name.
+ */
+@utility shadow-site-lg {
+	box-shadow:
+		0 1px 3px 0px #0000001a,
+		0 4px 6px -1px #0000001a;
+}
+
+@utility shadow-site-2xl {
+	box-shadow: 0 1px 3px 0px #00000040;
+}
+
+/* The blue halo of the main buttons, at rest and on hover. */
+@utility shadow-glow {
+	box-shadow: 0 0 24px color-mix(in oklab, var(--primary) 35%, transparent);
+}
+
+@utility shadow-glow-strong {
+	box-shadow: 0 0 30px color-mix(in oklab, var(--primary) 55%, transparent);
+}
+
+/*
+ * ─── Glows ────────────────────────────────────────────────────────────────────────────────────
+ * The soft colour clouds behind the sections (`Glow.svelte`). The original drew them as blurred
+ * circles, `blur(80–150px)`, several of them fixed or pulsing: a filter that size is repainted
+ * whenever anything under it moves, which made low-end phones stutter on scroll. A radial
+ * gradient looks the same and costs nothing to draw.
+ */
+.glow {
+	background: radial-gradient(
+		closest-side,
+		var(--glow-color) 0%,
+		color-mix(in oklab, var(--glow-color) 45%, transparent) 50%,
+		transparent 100%
+	);
+}
+
+/* Fades a picture into the page from the middle out, so its rectangle never shows. */
+.fade-edges {
+	mask-image: radial-gradient(closest-side, #000 45%, transparent 100%);
+}
+
+/*
+ * ─── Disclosures ──────────────────────────────────────────────────────────────────────────────
+ * `<details>` on the public page (the payment accounts, the mobile menu): no default triangle,
+ * and the payment panel slides open where the browser can animate to `auto` height.
+ */
+.site summary {
+	list-style: none;
+	cursor: pointer;
+}
+.site summary::-webkit-details-marker {
+	display: none;
+}
+
+@supports (interpolate-size: allow-keywords) {
+	.site .slide-open {
+		interpolate-size: allow-keywords;
+	}
+	.site .slide-open::details-content {
+		height: 0;
+		overflow: clip;
+		transition:
+			height 0.2s ease,
+			content-visibility 0.2s allow-discrete;
+	}
+	.site .slide-open[open]::details-content {
+		height: auto;
+	}
+}
+
+/* The page's background and the deeper one under the footer, switching with the theme. */
+@theme inline {
+	--color-site: var(--site-bg);
+	--color-site-deep: var(--site-deep);
+}
+
+@theme {
+	--animate-float: float 6s ease-in-out infinite;
+	--animate-scroll: scroll 30s linear infinite;
+	--animate-bob-up: bob-up 4s ease-in-out infinite;
+	--animate-bob-down: bob-down 5s ease-in-out 1s infinite;
+
+	@keyframes float {
+		0%,
+		100% {
+			transform: translateY(0);
+		}
+		50% {
+			transform: translateY(-20px);
+		}
+	}
+
+	@keyframes scroll {
+		from {
+			transform: translate(0);
+		}
+		to {
+			transform: translate(-50%);
+		}
+	}
+
+	@keyframes bob-up {
+		0%,
+		100% {
+			transform: translateY(0);
+		}
+		50% {
+			transform: translateY(-10px);
+		}
+	}
+
+	@keyframes bob-down {
+		0%,
+		100% {
+			transform: translateY(0);
+		}
+		50% {
+			transform: translateY(10px);
+		}
+	}
+}
+
+/*
+ * ─── Entrances ────────────────────────────────────────────────────────────────────────────────
+ * What framer-motion did on the original, in CSS so the server-rendered page animates without
+ * waiting for JavaScript. `enter-*` runs on load; `reveal` waits until it scrolls into view (the
+ * `inView` attachment adds `is-visible`). Hidden only when scripts run (`html.js`, set in
+ * app.html), so without JavaScript the content is simply there.
+ */
+@keyframes enter-down {
+	from {
+		opacity: 0;
+		transform: translateY(-100px);
+	}
+}
+
+@keyframes enter-left {
+	from {
+		opacity: 0;
+		transform: translateX(-50px);
+	}
+}
+
+@keyframes enter-up {
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+}
+
+@keyframes enter-zoom {
+	from {
+		opacity: 0;
+		transform: scale(0.8);
+	}
+}
+
+.enter-down {
+	animation: enter-down 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.enter-left {
+	animation: enter-left 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.enter-up {
+	animation: enter-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+	animation-delay: var(--delay, 0s);
+}
+.enter-zoom {
+	animation: enter-zoom 1s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.js .reveal {
+	opacity: 0;
+	transform: translateY(var(--reveal-y, 30px));
+	transition:
+		opacity var(--reveal-duration, 0.6s) ease-out var(--delay, 0s),
+		transform var(--reveal-duration, 0.6s) cubic-bezier(0.22, 1, 0.36, 1) var(--delay, 0s);
+}
+.js .reveal.is-visible {
+	opacity: 1;
+	transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.site *,
+	.site *::before,
+	.site *::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		transition-delay: 0s !important;
+	}
+}
+
+/*
+ * ─── Page transitions ─────────────────────────────────────────────────────────────────────────
+ * Moving between pages cross-fades through the View Transitions API (`onNavigate` in the site
+ * layout). The header has a name of its own, so it stays put while the page under it changes.
+ * Browsers without the API, and visitors who ask for less motion, get a plain page change.
+ */
+@keyframes page-out {
+	to {
+		opacity: 0;
+		transform: translateY(-8px);
+	}
+}
+@keyframes page-in {
+	from {
+		opacity: 0;
+		transform: translateY(14px);
+	}
+}
+@media (prefers-reduced-motion: no-preference) {
+	::view-transition-old(root) {
+		animation: page-out 0.18s ease-in both;
+	}
+	::view-transition-new(root) {
+		animation: page-in 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	::view-transition-group(*),
+	::view-transition-old(*),
+	::view-transition-new(*) {
+		animation: none !important;
+	}
+}
+.site-header {
+	view-transition-name: site-header;
+}
+
+/*
+ * ─── Articles ─────────────────────────────────────────────────────────────────────────────────
+ * A blog post's or a project's body: sanitised HTML from the editor (`$lib/server/sanitize`),
+ * rendered with `{@html}`. Typography for long reading, in both themes.
+ */
+.site .article-body {
+	font-size: 1.125rem;
+	line-height: 1.8;
+	color: color-mix(in oklab, var(--foreground) 88%, transparent);
+	overflow-wrap: break-word;
+}
+.site .article-body > * + * {
+	margin-top: 1.1em;
+}
+.site .article-body :where(h2) {
+	margin-top: 2em;
+	font-size: 1.75rem;
+	line-height: 1.25;
+	font-weight: 800;
+	color: var(--foreground);
+}
+.site .article-body :where(h3) {
+	margin-top: 1.6em;
+	font-size: 1.35rem;
+	font-weight: 700;
+	color: var(--foreground);
+}
+.site .article-body :where(a) {
+	color: var(--primary);
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+.site .article-body :where(strong, b) {
+	color: var(--foreground);
+	font-weight: 700;
+}
+.site .article-body :where(ul) {
+	list-style: disc;
+	padding-left: 1.5rem;
+}
+.site .article-body :where(ol) {
+	list-style: decimal;
+	padding-left: 1.5rem;
+}
+.site .article-body :where(li + li) {
+	margin-top: 0.4em;
+}
+.site .article-body :where(blockquote) {
+	border-left: 3px solid var(--primary);
+	padding: 0.25rem 0 0.25rem 1.25rem;
+	font-style: italic;
+	color: var(--muted-foreground);
+}
+.site .article-body :where(pre) {
+	overflow-x: auto;
+	border-radius: 1rem;
+	border: 1px solid var(--border);
+	background: var(--muted);
+	padding: 1rem 1.25rem;
+	font-size: 0.9rem;
+	line-height: 1.6;
+}
+.site .article-body :where(code) {
+	font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+	font-size: 0.9em;
+}
+.site .article-body :where(:not(pre) > code) {
+	border-radius: 0.375rem;
+	background: var(--muted);
+	padding: 0.1em 0.35em;
+}
+.site .article-body :where(img) {
+	width: 100%;
+	height: auto;
+	border-radius: 1.25rem;
+	border: 1px solid var(--border);
+}
+.site .article-body :where(hr) {
+	margin: 2.5em 0;
+	border-color: var(--border);
+}
+.site .article-body :where(table) {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 0.95rem;
+}
+.site .article-body :where(th, td) {
+	border: 1px solid var(--border);
+	padding: 0.5rem 0.75rem;
+	text-align: left;
+}

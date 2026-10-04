@@ -1,0 +1,12 @@
+# The public site is open to crawlers; the dashboard, its sign-in and the private rate links are not.
+# The sitemap is at /sitemap.xml. Add its full address here once the domain is known:
+# Sitemap: https://<domain>/sitemap.xml
+User-agent: *
+Disallow: /dashboard
+Disallow: /login
+Disallow: /logout
+Disallow: /rates/
+Disallow: /am/dashboard
+Disallow: /am/login
+Disallow: /am/logout
+Disallow: /am/rates/
