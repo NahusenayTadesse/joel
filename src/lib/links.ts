@@ -26,3 +26,6 @@ export function to(
 	).toString();
 	return `${href}${search ? `?${search}` : ''}${hash ? `#${hash}` : ''}` as ResolvedPathname;
 }
+
+/** Joel Talargie Academy, the separate LMS site; shown as "Academy" in the menus. */
+export const ACADEMY_URL = 'http://lms.joeltalargie.com/';

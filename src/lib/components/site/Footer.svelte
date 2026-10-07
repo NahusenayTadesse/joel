@@ -4,7 +4,7 @@
 	import MapPin from '@lucide/svelte/icons/map-pin';
 	import Phone from '@lucide/svelte/icons/phone';
 	import { formatPhone } from '$lib/format';
-	import { to } from '$lib/links';
+	import { ACADEMY_URL, to } from '$lib/links';
 	import { m } from '$lib/paraglide/messages.js';
 	import type { Site } from '$lib/server/site';
 	import ExternalLink from './ExternalLink.svelte';
@@ -124,6 +124,14 @@
 						</a>
 					</li>
 				{/each}
+				<li>
+					<ExternalLink
+						href={ACADEMY_URL}
+						class="flex min-h-10 items-center text-foreground/70 transition-colors hover:text-primary"
+					>
+						{m.nav_academy()}
+					</ExternalLink>
+				</li>
 			</ul>
 		</div>
 	</div>

@@ -2,10 +2,11 @@
 	import Menu from '@lucide/svelte/icons/menu';
 	import X from '@lucide/svelte/icons/x';
 	import { page } from '$app/state';
-	import { to } from '$lib/links';
+	import { ACADEMY_URL, to } from '$lib/links';
 	import { m } from '$lib/paraglide/messages.js';
 	import { deLocalizeUrl } from '$lib/paraglide/runtime';
 	import type { Site } from '$lib/server/site';
+	import ExternalLink from './ExternalLink.svelte';
 	import LanguageSwitch from './LanguageSwitch.svelte';
 	import ThemeToggle from './ThemeToggle.svelte';
 
@@ -64,6 +65,12 @@
 					{/if}
 				</a>
 			{/each}
+			<ExternalLink
+				href={ACADEMY_URL}
+				class="py-2 text-sm font-medium text-foreground/75 transition-colors hover:text-primary"
+			>
+				{m.nav_academy()}
+			</ExternalLink>
 		</nav>
 
 		<div class="flex items-center gap-2">
@@ -100,6 +107,13 @@
 								{link.label}
 							</a>
 						{/each}
+						<ExternalLink
+							href={ACADEMY_URL}
+							onclick={() => (menuOpen = false)}
+							class="rounded-xl px-4 py-3 font-medium text-foreground/85 transition-colors hover:bg-foreground/5 hover:text-primary"
+						>
+							{m.nav_academy()}
+						</ExternalLink>
 					</nav>
 					<a
 						href={to('/', 'contact')}
